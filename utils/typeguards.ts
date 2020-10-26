@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const isString = (object: unknown): object is string => {
   return (typeof object === 'string' || object instanceof String);
 };
