@@ -7,3 +7,7 @@ export const checkLogin = (req: Request, res: Response, next: NextFunction): Res
   else
     return next();
 };
+
+export const defaultEndpoint = (_req: Request, res: Response): Response => {
+  return res.status(404).json({ error: 'No such endpoint' });
+};

@@ -15,7 +15,6 @@ const loginTokenParser = (req: Request, _res: Response, next: NextFunction): voi
       return next();
     }
     if (isLoginToken(decodedToken)) {
-      console.log(decodedToken);
       req.userId = decodedToken.id;
     }
     else {
