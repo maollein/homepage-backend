@@ -21,3 +21,7 @@ export interface ILoginToken {
   name: string,
   id: number
 }
+
+export interface IObjectContainingLoginField {
+  login: unknown
+}

@@ -2,14 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { isLoginToken } from '../utils/typeguards';
+import { parseLoginCookie } from '../utils/parsers';
 
 const loginTokenParser = (req: Request, _res: Response, next: NextFunction): void => {
-  const authorization = req.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    const token = authorization.substring(7);
-    let decodedToken; 
+  const loginCookie = parseLoginCookie(req.signedCookies);
+  if (loginCookie) {
+    let decodedToken;
     try {
-      decodedToken = jwt.verify(token, config.JWT_SECRET);
+      decodedToken = jwt.verify(loginCookie, config.JWT_SECRET);
     } catch (e) {
       req.userId = null;
       return next();

@@ -3,6 +3,7 @@ import express from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import blogRouter from './controllers/blog';
 import loginRouter from './controllers/login';
 import { errorHandler } from './middleware/errorHandler';
@@ -10,8 +11,9 @@ import loginTokenParser from './middleware/loginTokenParser';
 import { defaultEndpoint } from './middleware/utils';
 
 const app = express();
-app.use(express.json());
+app.use(cookieParser(config.COOKIE_SECRET));
 app.use(loginTokenParser);
+app.use(express.json());
 app.use(express.static(config.UI_BUILD_PATH));
 
 if (process.env.NODE_ENV === 'development') {

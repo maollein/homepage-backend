@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { CookieOptions, Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db/db';
@@ -31,7 +31,19 @@ loginRouter.post('/', async (req, res) => {
     id: user.id
   };
   const token = jwt.sign(userForToken, config.JWT_SECRET, {expiresIn: '2d'});
-  return res.json({ token, username: user.username, name: user.name, id: user.id });
+
+  const cookieOptions: CookieOptions = {
+    httpOnly: true,
+    signed: true
+  };
+
+  if (process.env.NODE_ENV !== 'development') {
+    cookieOptions.secure = true;
+    cookieOptions.sameSite = true;
+  }
+
+  res.cookie('login', token, cookieOptions);
+  return res.json({username: user.username, name: user.name, id: user.id });
 });
 
 export default loginRouter;

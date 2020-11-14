@@ -1,6 +1,9 @@
 import { Pool, QueryResult } from 'pg';
+import config from '../config';
 
-const pool = new Pool();
+const pool = new Pool({
+  connectionString: config.DATABASE_URL
+});
 
 const closeDB = (): void => {
   pool.end(() => {

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { ILoginInfo, INewBlog } from "../types";
-import { isNumber, isString } from "./typeguards";
+import { isNumber, isObjectContainingLoginField, isString } from "./typeguards";
 import { validationError } from "./utils";
 
 export const parseLoginInfo = (object: any): ILoginInfo => {
@@ -17,6 +17,12 @@ export const parseNewBlog = (object: any): INewBlog => {
     title: parseString(object.title),
     content: parseString(object.content)
   };
+};
+
+export const parseLoginCookie = (object: any): string | null => {
+  if (isObjectContainingLoginField(object) && isString(object.login)) {
+    return object.login;
+  } else return null;
 };
 
 export const parseString = (object: unknown): string => {
