@@ -3,7 +3,7 @@ import { isNumber } from '../utils/typeguards';
 
 export const checkLogin = (req: Request, res: Response, next: NextFunction): Response | void => {
   if (!isNumber(req.userId) || isNaN(req.userId))
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(403).json({ error: 'Forbidden' });
   else
     return next();
 };

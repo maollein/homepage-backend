@@ -38,8 +38,8 @@ loginRouter.post('/', async (req, res) => {
   };
 
   if (process.env.NODE_ENV !== 'development') {
+    cookieOptions.sameSite = 'strict';
     cookieOptions.secure = true;
-    cookieOptions.sameSite = true;
   }
 
   res.cookie('login', token, cookieOptions);
