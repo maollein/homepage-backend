@@ -20,14 +20,13 @@ const csurfCookieOptions: csurf.CookieOptions = {
 
 if (process.env.NODE_ENV !== 'development') {
   csurfCookieOptions.secure = true,
-  csurfCookieOptions.sameSite = 'strict';
+    csurfCookieOptions.sameSite = 'strict';
 }
 
-app.use(csurf({cookie: csurfCookieOptions}));
+app.use(csurf({ cookie: csurfCookieOptions }));
 
 app.use(loginTokenParser);
 app.use(express.json());
-app.use(express.static(config.UI_BUILD_PATH));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(cors());
@@ -35,6 +34,8 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/blog', blogRouter);
 app.use('/api/login', loginRouter);
+
+app.use(express.static(config.UI_BUILD_PATH, { index: false }));
 
 app.get('*', (req, res) => {
   res.cookie('CSRF-TOKEN', req.csrfToken());
