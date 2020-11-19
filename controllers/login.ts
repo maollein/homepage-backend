@@ -9,7 +9,7 @@ import { loginError } from '../utils/utils';
 
 const loginRouter = Router();
 
-loginRouter.post('/', async (req, res) => {
+loginRouter.post('/login', async (req, res) => {
   const loginInfo = parseLoginInfo(req.body);
   const result = await db.query(
     'SELECT * FROM user_account WHERE username=$1',
@@ -30,11 +30,11 @@ loginRouter.post('/', async (req, res) => {
     name: user.name,
     id: user.id
   };
-  const token = jwt.sign(userForToken, config.JWT_SECRET, {expiresIn: '2d'});
+  const token = jwt.sign(userForToken, config.JWT_SECRET, { expiresIn: '2d' });
 
   const cookieOptions: CookieOptions = {
     httpOnly: true,
-    signed: true
+    signed: true,
   };
 
   if (process.env.NODE_ENV !== 'development') {
@@ -43,7 +43,12 @@ loginRouter.post('/', async (req, res) => {
   }
 
   res.cookie('login', token, cookieOptions);
-  return res.json({username: user.username, name: user.name, id: user.id });
+  return res.json({ username: user.username, name: user.name, id: user.id });
+});
+
+loginRouter.post('/logout', (_req, res) => {
+  res.cookie('login', '', { maxAge: 0 });
+  res.json({ response: 'Logged out' });
 });
 
 export default loginRouter;

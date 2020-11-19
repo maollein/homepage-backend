@@ -15,12 +15,18 @@ const app = express();
 app.use(cookieParser(config.COOKIE_SECRET));
 
 const csurfCookieOptions: csurf.CookieOptions = {
-  signed: true
+  signed: true,
+  httpOnly: true
+};
+
+const csrfTokenOptions: csurf.CookieOptions = {
 };
 
 if (process.env.NODE_ENV !== 'development') {
-  csurfCookieOptions.secure = true,
-    csurfCookieOptions.sameSite = 'strict';
+  csurfCookieOptions.secure = true;
+  csurfCookieOptions.sameSite = 'strict';
+  csrfTokenOptions.secure = true;
+  csrfTokenOptions.sameSite = 'strict';
 }
 
 app.use(csurf({ cookie: csurfCookieOptions }));
@@ -33,12 +39,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/api/blog', blogRouter);
-app.use('/api/login', loginRouter);
+app.use('/api', loginRouter);
 
 app.use(express.static(config.UI_BUILD_PATH, { index: false }));
 
 app.get('*', (req, res) => {
-  res.cookie('CSRF-TOKEN', req.csrfToken());
+  res.cookie('CSRF-TOKEN', req.csrfToken(), csrfTokenOptions);
   res.sendFile(path.join(config.UI_BUILD_PATH, '/index.html'));
 });
 
