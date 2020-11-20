@@ -18,7 +18,7 @@ const closeDB = (): void => {
 };
 
 export default {
-  query: (text: string, params: Array<string | number | null | undefined>): Promise<QueryResult> => { // TODO Fix this so that result row types work
+  query: <T>(text: string, params: Array<string | number | null | undefined>): Promise<QueryResult<T>> => {
     return pool.query(text, params);
   },
   pool,

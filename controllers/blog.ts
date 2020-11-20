@@ -27,7 +27,7 @@ blogRouter.post('/', checkLogin, async (req, res) => {
 });
 
 blogRouter.delete('/:id', checkLogin, async (req, res) => {
-  const result = await db.pool.query<{user_id: number}>('SELECT user_id FROM blog WHERE id=$1;', [req.params.id]);
+  const result = await db.query<{user_id: number}>('SELECT user_id FROM blog WHERE id=$1;', [req.params.id]);
   if (result.rowCount === 0) return res.status(404).json({ error: 'Not found' });
   if (result.rows[0].user_id === req.userId) {
     await db.query('DELETE FROM blog WHERE id=$1;', [req.params.id]);
