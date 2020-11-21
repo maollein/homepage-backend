@@ -1,7 +1,6 @@
 import config from './config';
 import express from 'express';
 import 'express-async-errors';
-import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import blogRouter from './controllers/blog';
@@ -33,10 +32,6 @@ app.use(csurf({ cookie: csurfCookieOptions }));
 
 app.use(loginTokenParser);
 app.use(express.json());
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(cors());
-}
 
 app.use('/api/blog', blogRouter);
 app.use('/api', loginRouter);
