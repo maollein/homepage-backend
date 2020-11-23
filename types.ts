@@ -1,4 +1,13 @@
-export interface INewBlog {
+export interface IBlogPost {
+  id: number,
+  title: string,
+  content: string,
+  created_at: string,
+  modified_at: string,
+  user_id: number
+}
+
+export interface INewBlogPost {
   title: string,
   content: string
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { ILoginInfo, INewBlog } from "../types";
+import { ILoginInfo, INewBlogPost } from "../types";
 import { isNumber, isObjectContainingLoginField, isString } from "./typeguards";
 import { validationError } from "./utils";
 
@@ -12,7 +12,7 @@ export const parseLoginInfo = (object: any): ILoginInfo => {
   };
 };
 
-export const parseNewBlog = (object: any): INewBlog => {
+export const parseNewBlog = (object: any): INewBlogPost => {
   return {
     title: parseString(object.title),
     content: parseString(object.content)

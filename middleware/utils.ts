@@ -11,3 +11,13 @@ export const checkLogin = (req: Request, res: Response, next: NextFunction): Res
 export const defaultEndpoint = (_req: Request, res: Response): Response => {
   return res.status(404).json({ error: 'No such endpoint' });
 };
+
+export const cspReportOnlyHeaderInjector = (_req: Request, res: Response, next: NextFunction): void => {
+  res.setHeader("Content-Security-Policy-Report-Only", "default-src 'self'; report-uri /api/cspreport");
+  return next();
+};
+
+export const cspHeaderInjector = (_req: Request, res: Response, next: NextFunction): void => {
+  res.setHeader("Content-Security-Policy", "default-src 'self';");
+  return next();
+};
