@@ -18,3 +18,7 @@ export const isLoginToken = (object: any): object is ILoginToken => {
 export const isObjectContainingLoginField = (object: any): object is IObjectContainingLoginField => {
   return Boolean(object && object.login);
 };
+
+export const isPositiveNumber = (object: number): object is number => {
+  return (object > 0);
+};
