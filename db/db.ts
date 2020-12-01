@@ -1,4 +1,4 @@
-import { Pool, PoolConfig, QueryResult } from 'pg';
+import { Pool, PoolConfig, QueryResult, types } from 'pg';
 import config from '../config';
 
 const poolConfig: PoolConfig = {
@@ -7,6 +7,13 @@ const poolConfig: PoolConfig = {
 
 if (process.env.NODE_ENV !== 'development')
   poolConfig.ssl = { rejectUnauthorized: false };
+
+// Overriding pg default date parsing so that no
+// time zone conversions are made to our
+// precious UTC timestamps.
+types.setTypeParser(1114, stringValue => {
+  return new Date(Date.parse(stringValue + "+0000"));
+});
 
 const pool = new Pool(poolConfig);
 
