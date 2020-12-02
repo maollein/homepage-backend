@@ -1,47 +1,37 @@
-import { CookieOptions, Router } from 'express';
+import { Router } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import db from '../db/db';
 import { parseLoginInfo } from '../utils/parsers';
-import { IUser } from '../types';
-import config from '../config';
 import { loginError } from '../utils/utils';
+import { compareAndFail, getJWT, getLoginCookieOptions } from '../utils/loginUtils';
+import userService from '../services/userService';
 
 const loginRouter = Router();
 
 loginRouter.post('/login', async (req, res) => {
   const loginInfo = parseLoginInfo(req.body);
-  const result = await db.query(
-    'SELECT * FROM user_account WHERE username=$1',
-    [loginInfo.username]
-  );
+  const user = await userService.getUserWithLoginCounter(loginInfo.username);
 
-  const user = result.rows[0] as IUser | undefined;
+  // To mitigate username enumeration based on timing, 
+  // we always compare passwords as if user account exists
+  // and is not locked.
+  if (!user || user.locked_until && new Date() < new Date(user.locked_until))
+    return await compareAndFail();
 
-  const passwordMatch = user === undefined
-    ? false
-    : await bcrypt.compare(loginInfo.password, user.password);
-
-  if (!user || !passwordMatch)
+  // To mitigate brute force password guessing,
+  // lock account after 10 failed login attempts.
+  const passwordMatch = await bcrypt.compare(loginInfo.password, user.password);
+  if (!passwordMatch) {
+    if (user.login_count < 10)
+      await userService.updateLoginCounter('increment', user.id);
+    else 
+      await userService.updateLoginCounter('lock', user.id);
     throw loginError();
-
-  const userForToken = {
-    username: user.username,
-    name: user.name,
-    id: user.id
-  };
-  const token = jwt.sign(userForToken, config.JWT_SECRET, { expiresIn: '2d' });
-
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    signed: true,
-  };
-
-  if (process.env.NODE_ENV !== 'development') {
-    cookieOptions.sameSite = 'strict';
-    cookieOptions.secure = true;
+  } else {
+    await userService.updateLoginCounter('reset', user.id);
   }
 
+  const token = getJWT(user);
+  const cookieOptions = getLoginCookieOptions();
   res.cookie('login', token, cookieOptions);
   return res.json({ username: user.username, name: user.name, id: user.id });
 });

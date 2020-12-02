@@ -24,6 +24,14 @@ export interface IUser {
   password: string
 }
 
+export interface ILoginCounter {
+  user_id: number,
+  login_count: number,
+  locked_until: string
+}
+
+export type IUserLoggingIn = IUser & ILoginCounter; 
+
 export interface ILoginToken {
   token: string,
   username: string,

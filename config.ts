@@ -8,12 +8,14 @@ interface IConfig {
   UI_BUILD_PATH: string;
   DATABASE_URL: string;
   COOKIE_SECRET: string;
+  FAKE_PASSWORD_HASH: string;
 }
 
 const PORT = process.env.PORT;
 const JWT_SECRET = process.env.JWT_SECRET;
 const DATABASE_URL = process.env.DATABASE_URL;
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
+const FAKE_PASSWORD_HASH = process.env.FAKE_PASSWORD_HASH;
 let UI_BUILD_PATH;
 
 if (process.env.NODE_ENV === 'production') {
@@ -25,5 +27,6 @@ export default {
   JWT_SECRET,
   UI_BUILD_PATH,
   DATABASE_URL,
-  COOKIE_SECRET
+  COOKIE_SECRET,
+  FAKE_PASSWORD_HASH
 } as IConfig;
