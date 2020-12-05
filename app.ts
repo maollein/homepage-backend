@@ -7,12 +7,28 @@ import blogRouter from './controllers/blog';
 import loginRouter from './controllers/login';
 import { errorHandler } from './middleware/errorHandler';
 import loginTokenParser from './middleware/loginTokenParser';
-import { cspHeaderInjector, defaultEndpoint } from './middleware/utils';
+import { defaultEndpoint } from './middleware/utils';
 import csurf from 'csurf';
 import cspReportingRouter from './controllers/cspReporting';
+import helmet from 'helmet';
 
 const app = express();
-app.use(cspHeaderInjector);
+app.disable("x-powered-by");
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'none'"],
+      scriptSrc: ["'self'"],
+      connectSrc: ["'self'"],
+      imgSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      scriptSrcAttr: ["'none'"],
+      blockAllMixedContent: [],
+      upgradeInsecureRequests: []
+    }
+  },
+  hidePoweredBy: false
+}));
 app.use(cookieParser(config.COOKIE_SECRET));
 app.use(express.json());
 
