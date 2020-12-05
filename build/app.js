@@ -15,8 +15,24 @@ const loginTokenParser_1 = __importDefault(require("./middleware/loginTokenParse
 const utils_1 = require("./middleware/utils");
 const csurf_1 = __importDefault(require("csurf"));
 const cspReporting_1 = __importDefault(require("./controllers/cspReporting"));
+const helmet_1 = __importDefault(require("helmet"));
 const app = express_1.default();
-app.use(utils_1.cspHeaderInjector);
+app.disable("x-powered-by");
+app.use(helmet_1.default({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'none'"],
+            scriptSrc: ["'self'"],
+            connectSrc: ["'self'"],
+            imgSrc: ["'self'"],
+            styleSrc: ["'self'"],
+            scriptSrcAttr: ["'none'"],
+            blockAllMixedContent: [],
+            upgradeInsecureRequests: []
+        }
+    },
+    hidePoweredBy: false
+}));
 app.use(cookie_parser_1.default(config_1.default.COOKIE_SECRET));
 app.use(express_1.default.json());
 const csurfCookieOptions = {
