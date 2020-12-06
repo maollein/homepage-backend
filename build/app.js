@@ -33,6 +33,7 @@ app.use(helmet_1.default({
     },
     hidePoweredBy: false
 }));
+app.use(utils_1.redirectHttpToHttps);
 app.use(cookie_parser_1.default(config_1.default.COOKIE_SECRET));
 app.use(express_1.default.json());
 const csurfCookieOptions = {
