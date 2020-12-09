@@ -21,7 +21,7 @@ loginRouter.post('/login', async (req, res) => {
   // lock account after 10 failed login attempts.
   const passwordMatch = await bcrypt.compare(loginInfo.password, user.password);
   if (!passwordMatch) {
-    if (user.login_count < 10)
+    if (user.login_count < 9)
       await userService.updateLoginCounter('increment', user.id);
     else 
       await userService.updateLoginCounter('lock', user.id);
