@@ -59,6 +59,19 @@ ALTER SEQUENCE public.blog_id_seq OWNED BY public.blog.id;
 
 
 --
+-- Name: login_counter; Type: TABLE; Schema: public; Owner: maollein
+--
+
+CREATE TABLE public.login_counter (
+    user_id integer NOT NULL,
+    login_count integer DEFAULT 0 NOT NULL,
+    locked_until timestamp without time zone
+);
+
+
+ALTER TABLE public.login_counter OWNER TO maollein;
+
+--
 -- Name: user_account; Type: TABLE; Schema: public; Owner: maollein
 --
 
@@ -117,6 +130,14 @@ ALTER TABLE ONLY public.blog
 
 
 --
+-- Name: login_counter login_counter_user_id_key; Type: CONSTRAINT; Schema: public; Owner: maollein
+--
+
+ALTER TABLE ONLY public.login_counter
+    ADD CONSTRAINT login_counter_user_id_key UNIQUE (user_id);
+
+
+--
 -- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: public; Owner: maollein
 --
 
@@ -138,6 +159,14 @@ ALTER TABLE ONLY public.user_account
 
 ALTER TABLE ONLY public.blog
     ADD CONSTRAINT blog_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_account(id) ON DELETE CASCADE;
+
+
+--
+-- Name: login_counter login_counter_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maollein
+--
+
+ALTER TABLE ONLY public.login_counter
+    ADD CONSTRAINT login_counter_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_account(id) ON DELETE CASCADE;
 
 
 --
