@@ -9,9 +9,11 @@ const app_1 = __importDefault(require("./app"));
 app_1.default.listen(config_1.default.PORT, () => {
     console.log(`Server running on port ${config_1.default.PORT}`);
 });
-process.on('exit', () => {
-    db_1.default.closeDB();
-});
 process.on('SIGINT', () => {
     db_1.default.closeDB();
+    console.log('We caught a sigint');
+});
+process.on('SIGTERM', () => {
+    db_1.default.closeDB();
+    console.log('We caught a sigterm');
 });
