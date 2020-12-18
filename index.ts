@@ -8,10 +8,8 @@ app.listen(config.PORT, () => {
 
 process.on('SIGINT', () => {
   db.closeDB();
-  console.log('We caught a sigint');
 });
 
 process.on('SIGTERM', () => {
   db.closeDB();
-  console.log('We caught a sigterm');
 });
