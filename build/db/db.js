@@ -18,10 +18,7 @@ pg_1.types.setTypeParser(1114, stringValue => {
 });
 const pool = new pg_1.Pool(poolConfig);
 const closeDB = () => {
-    pool.end(() => {
-        console.log('Pool ended');
-        process.exit();
-    });
+    return pool.end();
 };
 exports.default = {
     query: (text, params) => {
