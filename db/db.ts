@@ -17,11 +17,8 @@ types.setTypeParser(1114, stringValue => {
 
 const pool = new Pool(poolConfig);
 
-const closeDB = (): void => {
-  pool.end(() => {
-    console.log('Pool ended');
-    process.exit();
-  });
+const closeDB = (): Promise<void> => {
+  return pool.end();
 };
 
 export default {
