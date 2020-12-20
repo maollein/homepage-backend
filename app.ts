@@ -11,6 +11,7 @@ import { defaultEndpoint, redirectHttpToHttps } from './middleware/utils';
 import csurf from 'csurf';
 import cspReportingRouter from './controllers/cspReporting';
 import helmet from 'helmet';
+import compression from 'compression';
 
 const app = express();
 app.disable("x-powered-by");
@@ -51,6 +52,10 @@ if (process.env.NODE_ENV !== 'development') {
 app.use(csurf({ cookie: csurfCookieOptions }));
 
 app.use(loginTokenParser);
+
+app.use(compression({
+  threshold: '5kb'
+}));
 
 app.use('/api/blog', blogRouter);
 app.use('/api', loginRouter);
