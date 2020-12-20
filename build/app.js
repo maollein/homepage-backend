@@ -16,6 +16,7 @@ const utils_1 = require("./middleware/utils");
 const csurf_1 = __importDefault(require("csurf"));
 const cspReporting_1 = __importDefault(require("./controllers/cspReporting"));
 const helmet_1 = __importDefault(require("helmet"));
+const compression_1 = __importDefault(require("compression"));
 const app = express_1.default();
 app.disable("x-powered-by");
 app.use(helmet_1.default({
@@ -49,6 +50,9 @@ if (process.env.NODE_ENV !== 'development') {
 }
 app.use(csurf_1.default({ cookie: csurfCookieOptions }));
 app.use(loginTokenParser_1.default);
+app.use(compression_1.default({
+    threshold: '5kb'
+}));
 app.use('/api/blog', blog_1.default);
 app.use('/api', login_1.default);
 app.use('/api/cspreport', cspReporting_1.default);
