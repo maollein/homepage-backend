@@ -1,18 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isPositiveNumber = exports.isObjectContainingLoginField = exports.isLoginToken = exports.isNumber = exports.isString = void 0;
-exports.isString = (object) => {
+const isString = (object) => {
     return (typeof object === 'string' || object instanceof String);
 };
-exports.isNumber = (object) => {
+exports.isString = isString;
+const isNumber = (object) => {
     return (typeof object === 'number' || object instanceof Number);
 };
-exports.isLoginToken = (object) => {
+exports.isNumber = isNumber;
+const isLoginToken = (object) => {
     return (exports.isString(object.username) && exports.isString(object.name) && exports.isNumber(object.id));
 };
-exports.isObjectContainingLoginField = (object) => {
+exports.isLoginToken = isLoginToken;
+const isObjectContainingLoginField = (object) => {
     return Boolean(object && object.login);
 };
-exports.isPositiveNumber = (object) => {
+exports.isObjectContainingLoginField = isObjectContainingLoginField;
+const isPositiveNumber = (object) => {
     return (object > 0);
 };
+exports.isPositiveNumber = isPositiveNumber;

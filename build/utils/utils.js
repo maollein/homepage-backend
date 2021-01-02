@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unauthorizedError = exports.loginError = exports.validationError = void 0;
-exports.validationError = () => {
+const validationError = () => {
     return new Error('Invalid value');
 };
-exports.loginError = () => {
+exports.validationError = validationError;
+const loginError = () => {
     return new Error('Invalid username or password');
 };
-exports.unauthorizedError = () => {
+exports.loginError = loginError;
+const unauthorizedError = () => {
     return new Error('Unauthorized');
 };
+exports.unauthorizedError = unauthorizedError;
